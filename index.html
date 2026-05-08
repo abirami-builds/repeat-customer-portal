@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Repeat Customer Portal</title>
+
+    <!-- ✅ ADD STYLE HERE -->
+    <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { margin: 5px; padding: 8px; }
+    button { background-color: #4CAF50; color: white; border: none; }
+    h1 { color: #333; }
+    </style>
+
+</head>
+<body>
+
+    <h1>Repeat Customer Insights</h1>
+
+    <h2>Add Order</h2>
+    <input type="text" id="name" placeholder="Customer Name">
+    <input type="text" id="item" placeholder="Item">
+    <button onclick="addOrder()">Add Order</button>
+
+    <h2>All Orders</h2>
+    <button onclick="getOrders()">Show Orders</button>
+    <ul id="orders"></ul>
+
+    <h2>Repeat Customers</h2>
+    <button onclick="getRepeat()">Show Repeat Customers</button>
+    <ul id="repeat"></ul>
+
+<script>
+const API = "http://127.0.0.1:8000";
+
+function addOrder() {
+    const name = document.getElementById("name").value;
+    const item = document.getElementById("item").value;
+
+    fetch(`${API}/add-order?customer_name=${name}&item=${item}`, {
+        method: "POST"
+    })
+    .then(res => res.json())
+    .then(data => alert("Order Added"));
+}
+
+function getOrders() {
+    fetch(`${API}/orders`)
+    .then(res => res.json())
+    .then(data => {
+        const list = document.getElementById("orders");
+        list.innerHTML = "";
+        data.forEach(o => {
+            const li = document.createElement("li");
+            li.innerText = o.customer_name + " - " + o.item;
+            list.appendChild(li);
+        });
+    });
+}
+
+function getRepeat() {
+    fetch(`${API}/repeat-customers`)
+    .then(res => res.json())
+    .then(data => {
+        const list = document.getElementById("repeat");
+        list.innerHTML = "";
+        data.repeat_customers.forEach(name => {
+            const li = document.createElement("li");
+            li.innerText = name;
+            list.appendChild(li);
+        });
+    });
+}
+</script>
+
+</body>
+</html>
