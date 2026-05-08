@@ -28,17 +28,6 @@ This project helps restaurants understand customer behavior using backend APIs a
 
 ---
 
-## Project Structure
-
-repeat-customer-portal/
-│
-├── main.py
-├── index.html
-├── orders.db
-└── README.md
-
----
-
 ## API Endpoints
 
 ### GET /
