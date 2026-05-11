@@ -63,3 +63,48 @@ def repeat_customers():
     
     db.close()
     return {"repeat_customers": repeat}
+
+@app.get("/analytics")
+def analytics():
+
+    db = SessionLocal()
+
+    orders = db.query(Order).all()
+
+    total_orders = len(orders)
+
+    customers = set()
+    items = {}
+
+    for order in orders:
+
+        customers.add(order.customer_name)
+
+        if order.item in items:
+            items[order.item] += 1
+        else:
+            items[order.item] = 1
+
+    if items:
+        most_ordered_item = max(items, key=items.get)
+    else:
+        most_ordered_item = "No Orders"
+
+    db.close()
+
+    return {
+        "total_orders": total_orders,
+        "total_customers": len(customers),
+        "most_ordered_item": most_ordered_item
+    }
+    
+@app.get("/search-customer")
+def search_customer(name: str):
+
+    db = SessionLocal()
+
+    orders = db.query(Order).filter(Order.customer_name == name).all()
+
+    db.close()
+
+    return orders
