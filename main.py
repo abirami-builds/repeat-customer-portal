@@ -108,3 +108,33 @@ def search_customer(name: str):
     db.close()
 
     return orders
+
+@app.get("/customer-status")
+def customer_status():
+
+    db = SessionLocal()
+
+    orders = db.query(Order).all()
+
+    count = {}
+
+    for order in orders:
+        name = order.customer_name
+        count[name] = count.get(name, 0) + 1
+
+    status = {}
+
+    for name, total in count.items():
+
+        if total >= 5:
+            status[name] = "Loyal Customer"
+
+        elif total >= 2:
+            status[name] = "Repeat Customer"
+
+        else:
+            status[name] = "Normal Customer"
+
+    db.close()
+
+    return status
