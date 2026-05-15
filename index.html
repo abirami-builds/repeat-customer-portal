@@ -29,6 +29,10 @@
     <button onclick="getRepeat()">Show Repeat Customers</button>
     <ul id="repeat"></ul>
 
+    <h2>Analytics</h2>
+    <button onclick="getAnalytics()">Show Analytics</button>
+    <ul id="analytics"></ul>
+
 <script>
 const API = "http://127.0.0.1:8000";
 
@@ -68,6 +72,22 @@ function getRepeat() {
             li.innerText = name;
             list.appendChild(li);
         });
+    });
+}
+
+function getAnalytics() {
+
+    fetch(`${API}/analytics`)
+    .then(res => res.json())
+    .then(data => {
+
+        const list = document.getElementById("analytics");
+
+        list.innerHTML = `
+            <li>Total Orders: ${data.total_orders}</li>
+            <li>Total Customers: ${data.total_customers}</li>
+            <li>Most Ordered Item: ${data.most_ordered_item}</li>
+        `;
     });
 }
 </script>
