@@ -151,5 +151,24 @@ def export_orders():
         "total_orders": len(orders),
         "orders": orders
     }
+    
+@app.get("/admin-analytics")
+def admin_analytics(role: str):
+
+    if role != "admin":
+        return {"message": "Access Denied"}
+
+    db = SessionLocal()
+
+    orders = db.query(Order).all()
+
+    total_orders = len(orders)
+
+    db.close()
+
+    return {
+        "message": "Welcome Admin",
+        "total_orders": total_orders
+    }
 
     return status
