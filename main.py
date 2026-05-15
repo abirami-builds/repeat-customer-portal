@@ -136,5 +136,20 @@ def customer_status():
             status[name] = "Normal Customer"
 
     db.close()
+    
+@app.get("/export-orders")
+def export_orders():
+
+    db = SessionLocal()
+
+    orders = db.query(Order).all()
+
+    db.close()
+
+    return {
+        "report_name": "Restaurant Orders Report",
+        "total_orders": len(orders),
+        "orders": orders
+    }
 
     return status
